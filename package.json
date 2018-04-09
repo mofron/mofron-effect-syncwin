@@ -1,0 +1,19 @@
+{
+  "name": "mofron-effect-syncwin",
+  "version": "0.0.1",
+  "description": "synchronize target with window size effect for mofron",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simpart/mofron-effect-syncwin.git"
+  },
+  "author": "simparts",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/simpart/mofron-effect-syncwin/issues"
+  },
+  "homepage": "https://github.com/simpart/mofron-effect-syncwin#readme"
+}

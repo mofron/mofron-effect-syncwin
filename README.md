@@ -1,2 +1,2 @@
-# mofron-effect-syncpnt
+# mofron-effect-syncwin
 ```

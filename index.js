@@ -9,39 +9,12 @@
  */
 mofron.effect.SyncWin = class extends mofron.Effect {
     
-    constructor (x_po, y_flg) {
+    constructor (po, p2, p3, p4) {
         try {
             super();
             this.name('SyncWin');
-            this.prmOpt(x_po, y_flg);
-            if (null !== this.param()) {
-                this.xflag(x_po);
-                this.yflag(y_flg);
-            }
-        } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
-    
-    target (prm) {
-        try {
-            let ret = super.target(prm);
-            mofron.func.addResizeWin(
-                (eff) => {
-                    try {
-                        if (true === eff.status()) {
-                            eff.execute(true);
-                        }
-                    } catch (e) {
-                        console.error(e.stack);
-                        throw e;
-                    }
-                },
-                this,
-                200
-            );
-            return ret;
+            this.prmMap('xflag', 'yflag', 'xofs', 'yofs');
+            this.prmOpt(po, p2, p3, p4);
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -51,10 +24,27 @@ mofron.effect.SyncWin = class extends mofron.Effect {
     enable (tgt) {
         try {
             if (true === this.xflag()) {
-                tgt.width(window.innerWidth);
+                tgt.width(window.innerWidth + this.xofs());
             }
             if (true === this.yflag()) {
-                tgt.height(window.innerHeight);
+                tgt.height(window.innerHeight + this.yofs());
+            }
+            if (false === this.initFlag()) {
+                mofron.func.rsizWinEvent(
+                    (eff) => {
+                        try {
+                            if (true === eff.status()) {
+                                eff.execute(true);
+                            }
+                        } catch (e) {
+                            console.error(e.stack);
+                            throw e;
+                        }
+                    },
+                    this,
+                    200
+                );
+                this.initFlag(true);
             }
         } catch (e) {
             console.error(e.stack);
@@ -62,7 +52,14 @@ mofron.effect.SyncWin = class extends mofron.Effect {
         }
     }
     
-    disable (tgt) {}
+    disable (tgt) {
+        try {
+            this.status(false);
+        } catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
     
     xflag (flg) {
         try {
@@ -80,7 +77,7 @@ mofron.effect.SyncWin = class extends mofron.Effect {
             throw e;
         }
     }
-
+    
     yflag (flg) {
         try {
             if (undefined === flg) {
@@ -92,6 +89,68 @@ mofron.effect.SyncWin = class extends mofron.Effect {
                 throw new Error('invalid parameter');
             }
             this.m_yflag = flg;
+        } catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
+    
+    initFlag (prm) {
+        try {
+            if (undefined === prm) {
+                /* getter */
+               return (undefined === this.m_initflg) ? false : this.m_initflg;
+            }
+            /* setter */
+            if ('boolean' !== typeof prm) {
+                throw new Error('invalid parameter');
+            }
+            this.m_initflg = prm;
+        } catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
+    
+    offset (x, y) {
+         try {
+             let x_ret = this.xofs(x);
+             let y_ret = this.yofs(y);
+             return (undefined !== x_ret) ? [x_ret, y_ret] : undefined;
+         } catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
+    
+    xofs (prm) {
+        try {
+            if (undefined === prm) {
+                /* getter */
+                return (undefined === this.m_xofs) ? 0 : this.m_xofs;
+            }
+            /* setter */
+            if ('number' !== typeof prm) {
+                throw new Error('invalid parameter');
+            }
+            this.m_xofs = prm;
+        } catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
+    
+    yofs (prm) {
+        try {
+            if (undefined === prm) {
+                /* getter */
+                return (undefined === this.m_yofs) ? 0 : this.m_yofs;
+            }
+            /* setter */
+            if ('number' !== typeof prm) {
+                throw new Error('invalid parameter');
+            }
+            this.m_yofs = prm;
         } catch (e) {
             console.error(e.stack);
             throw e;

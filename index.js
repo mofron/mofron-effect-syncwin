@@ -130,10 +130,10 @@ mofron.effect.SyncWin = class extends mofron.Effect {
                 return (undefined === this.m_xofs) ? 0 : this.m_xofs;
             }
             /* setter */
-            if ('number' !== typeof prm) {
+            if ((null !== prm) && ('number' !== typeof prm)) {
                 throw new Error('invalid parameter');
             }
-            this.m_xofs = prm;
+            this.m_xofs = (null === prm) ? 0 : prm;
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -147,10 +147,10 @@ mofron.effect.SyncWin = class extends mofron.Effect {
                 return (undefined === this.m_yofs) ? 0 : this.m_yofs;
             }
             /* setter */
-            if ('number' !== typeof prm) {
+            if ((null !== prm) && ('number' !== typeof prm)) {
                 throw new Error('invalid parameter');
             }
-            this.m_yofs = prm;
+            this.m_yofs = (null === prm) ? 0 : prm;
         } catch (e) {
             console.error(e.stack);
             throw e;

@@ -2,6 +2,7 @@
  * @file mofron-effect-syncwin/index.js
  * @author simpart
  */
+const mf = require('mofron');
 
 /**
  * @class SyncWin
@@ -24,10 +25,28 @@ mofron.effect.SyncWin = class extends mofron.Effect {
     enable (tgt) {
         try {
             if (true === this.xflag()) {
-                tgt.width(window.innerWidth + this.xofs());
+                if ('rem' === tgt.sizeType()) {
+                    tgt.width(
+                        mf.func.convPx2Rem(window.innerWidth) + this.xofs()
+                    );
+                } else {
+                    tgt.width(
+                        window.innerWidth + mf.func.convRem2Px(this.xofs()),
+                        'px'
+                    );
+                }
             }
             if (true === this.yflag()) {
-                tgt.height(window.innerHeight + this.yofs());
+                if ('rem' === tgt.sizeType()) {
+                    tgt.height(
+                        mf.func.convPx2Rem(window.innerHeight) + this.yofs()
+                    ); 
+                } else {
+                    tgt.height(
+                        window.innerHeight + mf.func.convRem2Px(this.yofs()),
+                        'px'
+                    );
+                }
             }
             if (false === this.initFlag()) {
                 mofron.func.rsizWinEvent(

@@ -2,7 +2,6 @@
  * @file mofron-effect-syncwin/index.js
  * @author simpart
  */
-const mf = require('mofron');
 
 /**
  * @class SyncWin
@@ -24,28 +23,29 @@ mofron.effect.SyncWin = class extends mofron.Effect {
     
     enable (tgt) {
         try {
+            let siz_tp = tgt.sizeType();
             if (true === this.xflag()) {
-                if ('rem' === tgt.sizeType()) {
+                if ('px' === siz_tp) {
+                    tgt.width(window.innerWidth + this.xofs());
+                } else if ('rem' === siz_tp) {
                     tgt.width(
-                        mf.func.convPx2Rem(window.innerWidth) + this.xofs()
+                        mofron.func.convPx2Rem(window.innerWidth) + this.xofs()
                     );
                 } else {
-                    tgt.width(
-                        window.innerWidth + mf.func.convRem2Px(this.xofs()),
-                        'px'
-                    );
+                    /* not recommend */
+                    tgt.width((window.innerWidth + this.xofs()) + 'px');
                 }
             }
             if (true === this.yflag()) {
-                if ('rem' === tgt.sizeType()) {
+                if ('px' === siz_tp) {
+                    tgt.height(window.innerHeight + this.yofs());
+                } else if ('rem' === siz_tp) {
                     tgt.height(
-                        mf.func.convPx2Rem(window.innerHeight) + this.yofs()
-                    ); 
-                } else {
-                    tgt.height(
-                        window.innerHeight + mf.func.convRem2Px(this.yofs()),
-                        'px'
+                        mofron.func.convPx2Rem(window.innerHeight) + this.yofs()
                     );
+                } else {
+                    /* not recommend */
+                    tgt.height((window.innerHeight + this.yofs()) + 'px');
                 }
             }
             if (false === this.initFlag()) {
@@ -149,7 +149,7 @@ mofron.effect.SyncWin = class extends mofron.Effect {
                 return (undefined === this.m_xofs) ? 0 : this.m_xofs;
             }
             /* setter */
-            if ((null !== prm) && ('number' !== typeof prm)) {
+            if ( (null !== prm) && ('number' !== typeof prm) ) {
                 throw new Error('invalid parameter');
             }
             this.m_xofs = (null === prm) ? 0 : prm;

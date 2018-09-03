@@ -2,19 +2,19 @@
  * @file mofron-effect-syncwin/index.js
  * @author simpart
  */
-
+const mf = require('mofron');
 /**
  * @class SyncWin
  * @brief synchronize component with window
  */
-mofron.effect.SyncWin = class extends mofron.Effect {
+mf.effect.SyncWin = class extends mf.Effect {
     
-    constructor (po, p2, p3, p4) {
+    constructor (po, p2) {
         try {
             super();
             this.name('SyncWin');
-            this.prmMap('xflag', 'yflag', 'xofs', 'yofs');
-            this.prmOpt(po, p2, p3, p4);
+            this.prmMap('xflag', 'yflag');
+            this.prmOpt(po, p2);
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -23,31 +23,13 @@ mofron.effect.SyncWin = class extends mofron.Effect {
     
     enable (tgt) {
         try {
-            let siz_tp = tgt.sizeType();
-            if (true === this.xflag()) {
-                if ('px' === siz_tp) {
-                    tgt.width(window.innerWidth + this.xofs());
-                } else if ('rem' === siz_tp) {
-                    tgt.width(
-                        mofron.func.convPx2Rem(window.innerWidth) + this.xofs()
-                    );
-                } else {
-                    /* not recommend */
-                    tgt.width((window.innerWidth + this.xofs()) + 'px');
-                }
-            }
-            if (true === this.yflag()) {
-                if ('px' === siz_tp) {
-                    tgt.height(window.innerHeight + this.yofs());
-                } else if ('rem' === siz_tp) {
-                    tgt.height(
-                        mofron.func.convPx2Rem(window.innerHeight) + this.yofs()
-                    );
-                } else {
-                    /* not recommend */
-                    tgt.height((window.innerHeight + this.yofs()) + 'px');
-                }
-            }
+            let set_wid = mf.func.sizeSum(this.xofs(), new mf.size.Pixel(window.innerWidth));
+            let set_hei = mf.func.sizeSum(this.yofs(), new mf.size.Pixel(window.innerHeight));
+            tgt.execOption({
+                width  : (true === this.xflag()) ? set_wid : undefined,
+                height : (true === this.yflag()) ? set_hei : undefined
+            });
+                
             if (false === this.initFlag()) {
                 mofron.func.rsizWinEvent(
                     (eff) => {
@@ -146,13 +128,13 @@ mofron.effect.SyncWin = class extends mofron.Effect {
         try {
             if (undefined === prm) {
                 /* getter */
-                return (undefined === this.m_xofs) ? 0 : this.m_xofs;
+                return (undefined === this.m_xofs) ? new mf.size.Pixel(0) : this.m_xofs;
             }
             /* setter */
-            if ( (null !== prm) && ('number' !== typeof prm) ) {
+            if ('string' !== typeof prm) {
                 throw new Error('invalid parameter');
             }
-            this.m_xofs = (null === prm) ? 0 : prm;
+            this.m_xofs = prm;
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -163,13 +145,13 @@ mofron.effect.SyncWin = class extends mofron.Effect {
         try {
             if (undefined === prm) {
                 /* getter */
-                return (undefined === this.m_yofs) ? 0 : this.m_yofs;
+                return (undefined === this.m_yofs) ? new mf.size.Pixel(0) : this.m_yofs;
             }
             /* setter */
-            if ((null !== prm) && ('number' !== typeof prm)) {
+            if ('string' !== typeof prm) {
                 throw new Error('invalid parameter');
             }
-            this.m_yofs = (null === prm) ? 0 : prm;
+            this.m_yofs = prm;
         } catch (e) {
             console.error(e.stack);
             throw e;

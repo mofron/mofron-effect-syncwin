@@ -1,19 +1,27 @@
 /**
  * @file mofron-effect-syncwin/index.js
+ * @brief synchronize component with window
  * @author simpart
  */
 const mf = require('mofron');
 /**
- * @class SyncWin
+ * @class mf.effect.SyncWin
  * @brief synchronize component with window
  */
 mf.effect.SyncWin = class extends mf.Effect {
     
+    /**
+     * initialize effect
+     * 
+     * @param p1 (object) effect option
+     * @param p1 (boolean) horizon flag
+     * @param p2 (boolean) vertical flag
+     */
     constructor (po, p2) {
         try {
             super();
             this.name('SyncWin');
-            this.prmMap('xflag', 'yflag');
+            this.prmMap(['xflag', 'yflag']);
             this.prmOpt(po, p2);
         } catch (e) {
             console.error(e.stack);
@@ -21,31 +29,33 @@ mf.effect.SyncWin = class extends mf.Effect {
         }
     }
     
+    /**
+     * enable synchronize window size
+     *
+     * @note private method
+     */
     enable (tgt) {
         try {
-            let set_wid = mf.func.sizeSum(this.xofs(), new mf.size.Pixel(window.innerWidth));
-            let set_hei = mf.func.sizeSum(this.yofs(), new mf.size.Pixel(window.innerHeight));
+            let set_wid = mf.func.sizeSum(this.xofs(), window.innerWidth + 'px');
+            let set_hei = mf.func.sizeSum(this.yofs(), window.innerHeight + 'px');
             tgt.execOption({
                 width  : (true === this.xflag()) ? set_wid : undefined,
                 height : (true === this.yflag()) ? set_hei : undefined
             });
-                
-            if (false === this.initFlag()) {
-                mofron.func.rsizWinEvent(
-                    (eff) => {
-                        try {
-                            if (true === eff.status()) {
-                                eff.execute(true);
-                            }
-                        } catch (e) {
-                            console.error(e.stack);
-                            throw e;
+            
+            if (undefined === this.m_initflg) {
+                let fnc = (eff) => {
+                    try {
+                        if (true === eff.status()) {
+                            eff.execute(true);
                         }
-                    },
-                    this,
-                    200
-                );
-                this.initFlag(true);
+                    } catch (e) {
+                        console.error(e.stack);
+                        throw e;
+                    }
+                }
+                mf.func.rsizWinEvent(fnc, this, 200);
+                this.m_initflg = true;
             }
         } catch (e) {
             console.error(e.stack);
@@ -53,66 +63,49 @@ mf.effect.SyncWin = class extends mf.Effect {
         }
     }
     
-    disable (tgt) {
-        try {
-            this.status(false);
-        } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
+    /**
+     * disable synchronize window size
+     *
+     * @note private method
+     */
+    disable () {}
     
+    /**
+     * setter/getter horizon synchronize flag
+     * 
+     * @param p1 (boolean) horizon enable flag
+     * @param p1 (undefined) call as getter
+     * @return (boolean) horizon enable flag
+     */
     xflag (flg) {
-        try {
-            if (undefined === flg) {
-                /* getter */
-                return (undefined === this.m_xflag) ? true : this.m_xflag;
-            }
-            /* setter */
-            if ('boolean' !== typeof flg) {
-                throw new Error('invalid parameter');
-            }
-            this.m_xflag = flg;
-        } catch (e) {
+        try { return this.member('xflag', 'boolean', flg, true); } catch (e) {
             console.error(e.stack);
             throw e;
         }
     }
     
+    /**
+     * setter/getter vertical synchronize flag
+     * 
+     * @param p1 (boolean) horizon enable flag
+     * @param p1 (undefined) call as getter
+     * @return (boolean) horizon enable flag
+     */
     yflag (flg) {
-        try {
-            if (undefined === flg) {
-                /* getter */
-                return (undefined === this.m_yflag) ? true : this.m_yflag;
-            }
-            /* setter */
-            if ('boolean' !== typeof flg) {
-                throw new Error('invalid parameter');
-            }
-            this.m_yflag = flg;
-        } catch (e) {
+        try { return this.member('yflag', 'boolean', flg, true); } catch (e) {
             console.error(e.stack);
             throw e;
         }
     }
     
-    initFlag (prm) {
-        try {
-            if (undefined === prm) {
-                /* getter */
-               return (undefined === this.m_initflg) ? false : this.m_initflg;
-            }
-            /* setter */
-            if ('boolean' !== typeof prm) {
-                throw new Error('invalid parameter');
-            }
-            this.m_initflg = prm;
-        } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
-    
+    /**
+     * setter/getter offset size
+     * 
+     * @param p1 (string) horizon offset size (css value)
+     * @param p1 (undefined) cass as getter
+     * @param p2 (string) vertical offset size (css value)
+     * @return (Array) [horizon offset size, vertical offset size]
+     */
     offset (x, y) {
          try {
              let x_ret = this.xofs(x);
@@ -124,35 +117,29 @@ mf.effect.SyncWin = class extends mf.Effect {
         }
     }
     
+    /**
+     * setter/getter horizon offset size
+     *
+     * @param p1 (string) horizon offset size (css value)
+     * @param p1 (undefined) call as getter
+     * @return (string) horizon offset size (css value)
+     */
     xofs (prm) {
-        try {
-            if (undefined === prm) {
-                /* getter */
-                return (undefined === this.m_xofs) ? new mf.size.Pixel(0) : this.m_xofs;
-            }
-            /* setter */
-            if ('string' !== typeof prm) {
-                throw new Error('invalid parameter');
-            }
-            this.m_xofs = prm;
-        } catch (e) {
+        try { return this.member('xofs', 'string', prm, '0px'); } catch (e) {
             console.error(e.stack);
             throw e;
         }
     }
     
+    /**
+     * setter/getter vertical offset size
+     * 
+     * @param p1 (string) vertical offset size (css value)
+     * @param p1 (undefined) call as getter
+     * @return (string) vertical offset size (css value)
+     */
     yofs (prm) {
-        try {
-            if (undefined === prm) {
-                /* getter */
-                return (undefined === this.m_yofs) ? new mf.size.Pixel(0) : this.m_yofs;
-            }
-            /* setter */
-            if ('string' !== typeof prm) {
-                throw new Error('invalid parameter');
-            }
-            this.m_yofs = prm;
-        } catch (e) {
+        try { return this.member('yofs', 'string', prm, '0px'); } catch (e) {
             console.error(e.stack);
             throw e;
         }

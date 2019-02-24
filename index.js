@@ -21,7 +21,7 @@ mf.effect.SyncWin = class extends mf.Effect {
         try {
             super();
             this.name('SyncWin');
-            this.prmMap(['xflag', 'yflag']);
+            this.prmMap(['valid', 'offset']);
             this.prmOpt(po, p2);
         } catch (e) {
             console.error(e.stack);
@@ -34,65 +34,33 @@ mf.effect.SyncWin = class extends mf.Effect {
      *
      * @note private method
      */
-    enable (tgt) {
+    contents (tgt) {
         try {
-            let set_wid = mf.func.sizeSum(this.xofs(), window.innerWidth + 'px');
-            let set_hei = mf.func.sizeSum(this.yofs(), window.innerHeight + 'px');
-            tgt.execOption({
-                width  : (true === this.xflag()) ? set_wid : undefined,
-                height : (true === this.yflag()) ? set_hei : undefined
-            });
+            let ofs = this.offset();
+            let vld = this.valid();
+            let set_wid = mf.func.sizeSum(ofs[0] + 'px', window.innerWidth + 'px');
+            let set_hei = mf.func.sizeSum(ofs[1] + 'px', window.innerHeight + 'px');
             
-            if (undefined === this.m_initflg) {
-                let fnc = (eff) => {
-                    try {
-                        if (true === eff.status()) {
-                            eff.execute(true);
-                        }
-                    } catch (e) {
-                        console.error(e.stack);
-                        throw e;
-                    }
-                }
-                mf.func.rsizWinEvent(fnc, this, 200);
-                this.m_initflg = true;
-            }
+            tgt.option({
+                width  : (true === vld[0]) ? set_wid : undefined,
+                height : (true === vld[1]) ? set_hei : undefined
+            });
         } catch (e) {
             console.error(e.stack);
             throw e;
         }
     }
     
-    /**
-     * disable synchronize window size
-     *
-     * @note private method
-     */
-    disable () {}
-    
-    /**
-     * setter/getter horizon synchronize flag
-     * 
-     * @param p1 (boolean) horizon enable flag
-     * @param p1 (undefined) call as getter
-     * @return (boolean) horizon enable flag
-     */
-    xflag (flg) {
-        try { return this.member('xflag', 'boolean', flg, true); } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
-    
-    /**
-     * setter/getter vertical synchronize flag
-     * 
-     * @param p1 (boolean) horizon enable flag
-     * @param p1 (undefined) call as getter
-     * @return (boolean) horizon enable flag
-     */
-    yflag (flg) {
-        try { return this.member('yflag', 'boolean', flg, true); } catch (e) {
+    valid (x, y) {
+        try {
+            if ( (undefined === x) && (undefined === y) ) {
+                /* getter */
+                return [this.getMember('valid_x'), this.getMember('valid_y')];
+            }
+            /* setter */
+            this.member('valid_x', 'boolean', x, true);
+            this.member('valid_y', 'boolean', y, true);
+         } catch (e) {
             console.error(e.stack);
             throw e;
         }
@@ -107,39 +75,15 @@ mf.effect.SyncWin = class extends mf.Effect {
      * @return (Array) [horizon offset size, vertical offset size]
      */
     offset (x, y) {
-         try {
-             let x_ret = this.xofs(x);
-             let y_ret = this.yofs(y);
-             return (undefined !== x_ret) ? [x_ret, y_ret] : undefined;
+        try {
+            if ( (undefined === x) && (undefined === y) ) {
+                /* getter */
+                return [this.getMember('ofs_x'), this.getMember('ofs_y')];
+            }
+            /* setter */
+            this.member('ofs_x', 'number', x, 0);
+            this.member('ofs_y', 'number', y, 0);
          } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
-    
-    /**
-     * setter/getter horizon offset size
-     *
-     * @param p1 (string) horizon offset size (css value)
-     * @param p1 (undefined) call as getter
-     * @return (string) horizon offset size (css value)
-     */
-    xofs (prm) {
-        try { return this.member('xofs', 'string', prm, '0px'); } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
-    
-    /**
-     * setter/getter vertical offset size
-     * 
-     * @param p1 (string) vertical offset size (css value)
-     * @param p1 (undefined) call as getter
-     * @return (string) vertical offset size (css value)
-     */
-    yofs (prm) {
-        try { return this.member('yofs', 'string', prm, '0px'); } catch (e) {
             console.error(e.stack);
             throw e;
         }

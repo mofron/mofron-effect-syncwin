@@ -41,10 +41,18 @@ mf.effect.SyncWin = class extends mf.Effect {
             let set_wid = mf.func.sizeSum(ofs[0] + 'px', window.innerWidth + 'px');
             let set_hei = mf.func.sizeSum(ofs[1] + 'px', window.innerHeight + 'px');
             
-            tgt.option({
-                width  : (true === vld[0]) ? set_wid : undefined,
-                height : (true === vld[1]) ? set_hei : undefined
-            });
+            tgt.option({ width: set_wid, height: set_hei });
+            
+            if (false === this.isInited()) {
+                let fnc = (eff) => {
+                    try { eff.execute(); } catch (e) {
+                        console.error(e.stack);
+                        throw e;
+                    }
+                }
+                mf.func.rsizWinEvent(fnc, this, 200);
+                this.execute();
+            }
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -78,7 +86,10 @@ mf.effect.SyncWin = class extends mf.Effect {
         try {
             if ( (undefined === x) && (undefined === y) ) {
                 /* getter */
-                return [this.getMember('ofs_x'), this.getMember('ofs_y')];
+                return [
+                    this.member('ofs_x', 'number', x, 0),
+                    this.member('ofs_y', 'number', y, 0)
+                ];
             }
             /* setter */
             this.member('ofs_x', 'number', x, 0);

@@ -36,12 +36,28 @@ mf.effect.SyncWin = class extends mf.Effect {
      */
     contents (tgt) {
         try {
-            let ofs = this.offset();
-            let vld = this.valid();
-            let set_wid = mf.func.sizeSum(ofs[0] + 'px', window.innerWidth + 'px');
-            let set_hei = mf.func.sizeSum(ofs[1] + 'px', window.innerHeight + 'px');
+            let ofs     = this.offset();
+            let vld     = this.valid();
+            let set_siz = [null, null];
             
-            tgt.option({ width: set_wid, height: set_hei });
+            for (let oidx in ofs) {
+                if ('%' === ofs[oidx].type()) {
+                    let px_val = null;
+                    let win = (0 == oidx) ? window.innerWidth : window.innerHeight;
+                    px_val = (win*Math.abs(ofs[oidx].value()))/100 + 'px';
+                    set_siz[oidx] = mf.func.sizeSum(
+                        (0 == oidx) ? window.innerWidth + 'px' : window.innerHeight + 'px',
+                        (0 > ofs[oidx].value()) ? '-' + px_val : px_val
+                    );
+                } else {
+                    set_siz[oidx] = mf.func.sizeSum(
+                        (0 == oidx) ? window.innerWidth + 'px' : window.innerHeight + 'px',
+                        ofs[oidx].toPxnum() + 'px',
+                    );
+                }
+            
+            }
+            tgt.option({ width: set_siz[0], height: set_siz[1] });
             
             if (false === this.isInited()) {
                 let fnc = (eff) => {
@@ -87,13 +103,17 @@ mf.effect.SyncWin = class extends mf.Effect {
             if ( (undefined === x) && (undefined === y) ) {
                 /* getter */
                 return [
-                    this.member('ofs_x', 'number', x, 0),
-                    this.member('ofs_y', 'number', y, 0)
+                    this.member('ofs_x', 'string', x, '0px'),
+                    this.member('ofs_y', 'string', y, '0px')
                 ];
             }
             /* setter */
-            this.member('ofs_x', 'number', x, 0);
-            this.member('ofs_y', 'number', y, 0);
+            this.member(
+                'ofs_x', ['Base', 'Size'], ('number' === typeof x) ? mf.func.getSize(x + 'px') :  mf.func.getSize(x)
+            );
+            this.member(
+                'ofs_y', ['Base', 'Size'], ('number' === typeof y) ? mf.func.getSize(y + 'px') : mf.func.getSize(y)
+            );
          } catch (e) {
             console.error(e.stack);
             throw e;

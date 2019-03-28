@@ -103,8 +103,8 @@ mf.effect.SyncWin = class extends mf.Effect {
             if ( (undefined === x) && (undefined === y) ) {
                 /* getter */
                 return [
-                    this.member('ofs_x', 'string', x, '0px'),
-                    this.member('ofs_y', 'string', y, '0px')
+                    this.member('ofs_x', 'string', x, mf.func.getSize('0px')),
+                    this.member('ofs_y', 'string', y, mf.func.getSize('0px'))
                 ];
             }
             /* setter */

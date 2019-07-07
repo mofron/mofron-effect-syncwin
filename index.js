@@ -37,7 +37,6 @@ mf.effect.SyncWin = class extends mf.Effect {
     contents (tgt) {
         try {
             let ofs     = this.offset();
-            let vld     = this.valid();
             let set_siz = [null, null];
             
             for (let oidx in ofs) {
@@ -57,7 +56,12 @@ mf.effect.SyncWin = class extends mf.Effect {
                 }
             
             }
-            tgt.option({ width: set_siz[0], height: set_siz[1] });
+            let vld = this.valid();
+            if (true === vld[0]) {
+                tgt.option({ width: set_siz[0] });
+            } else if (true === vld[1]) {
+                tgt.option({ height: set_siz[1] });
+            }
             
             if (false === this.isInited()) {
                 let fnc = (eff) => {

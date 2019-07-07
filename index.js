@@ -22,6 +22,8 @@ mf.effect.SyncWin = class extends mf.Effect {
             super();
             this.name('SyncWin');
             this.prmMap(['valid', 'offset']);
+            this.valid(true, true);
+            this.offset("0px", "0px");
             this.prmOpt(po, p2);
         } catch (e) {
             console.error(e.stack);
@@ -59,7 +61,8 @@ mf.effect.SyncWin = class extends mf.Effect {
             let vld = this.valid();
             if (true === vld[0]) {
                 tgt.option({ width: set_siz[0] });
-            } else if (true === vld[1]) {
+            }
+            if (true === vld[1]) {
                 tgt.option({ height: set_siz[1] });
             }
             
@@ -83,12 +86,26 @@ mf.effect.SyncWin = class extends mf.Effect {
         try {
             if ( (undefined === x) && (undefined === y) ) {
                 /* getter */
-                return [this.getMember('valid_x'), this.getMember('valid_y')];
+                return [this.valid_x(),this.valid_y()];
             }
             /* setter */
-            this.member('valid_x', 'boolean', x, true);
-            this.member('valid_y', 'boolean', y, true);
+            this.valid_x(x);
+            this.valid_y(y)
          } catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
+    
+    valid_x (prm) {
+        try { return this.member("valid_x", "boolean", prm); } catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
+    
+    valid_y (prm) {
+        try { return this.member("valid_y", "boolean", prm); } catch (e) {
             console.error(e.stack);
             throw e;
         }
@@ -107,18 +124,38 @@ mf.effect.SyncWin = class extends mf.Effect {
             if ( (undefined === x) && (undefined === y) ) {
                 /* getter */
                 return [
-                    this.member('ofs_x', 'string', x, mf.func.getSize('0px')),
-                    this.member('ofs_y', 'string', y, mf.func.getSize('0px'))
+                    mf.func.getSize(this.member("offset_x")),
+                    mf.func.getSize(this.member("offset_y"))
                 ];
             }
             /* setter */
-            this.member(
-                'ofs_x', ['Base', 'Size'], ('number' === typeof x) ? mf.func.getSize(x + 'px') :  mf.func.getSize(x)
-            );
-            this.member(
-                'ofs_y', ['Base', 'Size'], ('number' === typeof y) ? mf.func.getSize(y + 'px') : mf.func.getSize(y)
-            );
+            this.offset_x(x);
+            this.offset_y(y);
          } catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
+    
+    offset_x (prm) {
+        try {
+            return this.member(
+                       "offset_x", "string",
+                       (undefined !== prm) ? mf.func.getSize(prm).toString() : prm,
+                   );
+        } catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
+    
+    offset_y (prm) {
+        try {
+            return this.member(
+                       "offset_y", "string",
+                       (undefined !== prm) ? mf.func.getSize(prm).toString() : prm,
+                   );
+        } catch (e) {
             console.error(e.stack);
             throw e;
         }

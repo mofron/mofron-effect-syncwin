@@ -1,0 +1,6 @@
+<require>
+    <tag module="mofron-effect-syncwin">SyncWin</tag>
+</require>
+
+<div baseColor="#f0e6fa" effect=SyncWin()>
+</div>

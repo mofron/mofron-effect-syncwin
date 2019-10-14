@@ -1,21 +1,20 @@
 /**
  * @file mofron-effect-syncwin/index.js
  * @brief synchronize component with window
+ *        target component size is changed even if the window size is changed.
  * @author simpart
  */
 const mf = require('mofron');
-/**
- * @class mf.effect.SyncWin
- * @brief synchronize component with window
- */
+
 mf.effect.SyncWin = class extends mf.Effect {
-    
     /**
      * initialize effect
      * 
-     * @param p1 (object) effect option
-     * @param p1 (boolean) horizon flag
-     * @param p2 (boolean) vertical flag
+     * @param (mixed) valid parameter
+     *                object: effect option
+     * @param (array) offset parameter
+     * @pmap valid,offset
+     * @type private
      */
     constructor (po, p2) {
         try {
@@ -33,27 +32,25 @@ mf.effect.SyncWin = class extends mf.Effect {
     
     /**
      * enable synchronize window size
-     *
-     * @note private method
+     * 
+     * @type private
      */
     contents (tgt) {
         try {
             let ofs     = this.offset();
             let set_siz = [null, null];
-            
+            let win     = [window.innerWidth, window.innerHeight];
+
+	    /* set offset size */
             for (let oidx in ofs) {
                 if ('%' === ofs[oidx].type()) {
-                    let px_val = null;
-                    let win = (0 == oidx) ? window.innerWidth : window.innerHeight;
-                    px_val = (win*Math.abs(ofs[oidx].value()))/100 + 'px';
+                    let px_val = (win[oidx] * Math.abs(ofs[oidx].value()))/100 + 'px';
                     set_siz[oidx] = mf.func.sizeSum(
-                        (0 == oidx) ? window.innerWidth + 'px' : window.innerHeight + 'px',
-                        (0 > ofs[oidx].value()) ? '-' + px_val : px_val
+		        win[oidx] + 'px', (0 > ofs[oidx].value()) ? '-' + px_val : px_val
                     );
                 } else {
                     set_siz[oidx] = mf.func.sizeSum(
-                        (0 == oidx) ? window.innerWidth + 'px' : window.innerHeight + 'px',
-                        ofs[oidx].toPxnum() + 'px',
+		        win[oidx] + 'px', ofs[oidx].toPxnum() + 'px',
                     );
                 }
             
@@ -74,7 +71,6 @@ mf.effect.SyncWin = class extends mf.Effect {
                     }
                 }
                 mf.func.rsizWinEvent(fnc, this, 200);
-                this.execute();
             }
         } catch (e) {
             console.error(e.stack);
@@ -82,6 +78,14 @@ mf.effect.SyncWin = class extends mf.Effect {
         }
     }
     
+    /**
+     * set x,y valid flag
+     * 
+     * @param (boolean) valid flag for horizon
+     * @param (boolean) valid flag for vertical
+     * @return (array) [x-flag, y-flag]
+     * @type parameter
+     */
     valid (x, y) {
         try {
             if ( (undefined === x) && (undefined === y) ) {
@@ -97,15 +101,32 @@ mf.effect.SyncWin = class extends mf.Effect {
         }
     }
     
+    /**
+     * valid flag for horizon
+     * 
+     * @param (boolean) valid flag for horizon
+     * @return (boolean) valid flag for horizon
+     * @type private
+     */
     valid_x (prm) {
-        try { return this.member("valid_x", "boolean", prm); } catch (e) {
+        try {
+	    return this.member("valid_x", "boolean", prm);
+	} catch (e) {
             console.error(e.stack);
             throw e;
         }
     }
     
+    /**
+     * valid flag for vertical
+     * @param (boolean) valid flag for vertical
+     * @return (boolean) valid flag for vertical
+     * @type private
+     */
     valid_y (prm) {
-        try { return this.member("valid_y", "boolean", prm); } catch (e) {
+        try {
+	    return this.member("valid_y", "boolean", prm);
+	} catch (e) {
             console.error(e.stack);
             throw e;
         }
@@ -114,10 +135,10 @@ mf.effect.SyncWin = class extends mf.Effect {
     /**
      * setter/getter offset size
      * 
-     * @param p1 (string) horizon offset size (css value)
-     * @param p1 (undefined) cass as getter
-     * @param p2 (string) vertical offset size (css value)
-     * @return (Array) [horizon offset size, vertical offset size]
+     * @param (string (size)) horizon offset size
+     * @param (string (size)) vertical offset size
+     * @return (array) [horizon offset size, vertical offset size]
+     * @type parameter
      */
     offset (x, y) {
         try {
@@ -137,24 +158,32 @@ mf.effect.SyncWin = class extends mf.Effect {
         }
     }
     
+    /**
+     * offset size for horizon
+     * 
+     * @param (string (size)) offset size for horizon
+     * @return (string (size)) offset size for horizon
+     * @type private
+     */
     offset_x (prm) {
         try {
-            return this.member(
-                       "offset_x", "string",
-                       (undefined !== prm) ? mf.func.getSize(prm).toString() : prm,
-                   );
+            return this.member("offset_x", "size", prm);
         } catch (e) {
             console.error(e.stack);
             throw e;
         }
     }
     
+    /**
+     * offset size for vertical
+     * 
+     * @param (string (size)) offset size for vertical
+     * @return (string (size)) offset size for vertical
+     * @type private
+     */
     offset_y (prm) {
         try {
-            return this.member(
-                       "offset_y", "string",
-                       (undefined !== prm) ? mf.func.getSize(prm).toString() : prm,
-                   );
+            return this.member("offset_y", "size", prm);
         } catch (e) {
             console.error(e.stack);
             throw e;

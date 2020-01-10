@@ -14,18 +14,18 @@ npm install mofron mofron-effect-syncwin
 # Sample
 ```html
 <require>
-    <tag module="mofron-effect-syncwin">SyncWin</tag>
+    <tag load="mofron-effect-syncwin">SyncWin</tag>
 </require>
 
-<div baseColor="#f0e6fa" effect=SyncWin()>
-</div>
+<div color2="#f0e6fa" effect=SyncWin()></div>
 ```
+
 # Parameter
 
-|Simple<br>Param | Parameter Name | Type | Description |
-|:--------------:|:---------------|:-----|:------------|
-|◯| valid | boolean | valid flag for horizon |
+| Short<br>Form | Parameter Name | Type | Description |
+|:-------------:|:---------------|:-----|:------------|
+| ◯  | valid | boolean | valid flag for horizon |
 | | | boolean | valid flag for vertical |
-|◯| offset | string (size) | horizon offset size |
+| ◯  | offset | string (size) | horizon offset size |
 | | | string (size) | vertical offset size |
 

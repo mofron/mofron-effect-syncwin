@@ -28,7 +28,7 @@ module.exports = class extends mofron.class.Effect {
             
 	    /* set config */
 	    if (0 < arguments.length) {
-                this.confmng(p1, p2);
+                this.config(p1, p2);
             }
         } catch (e) {
             console.error(e.stack);

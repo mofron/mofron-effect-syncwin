@@ -2,4 +2,5 @@
     <tag load="mofron-effect-syncwin">SyncWin</tag>
 </require>
 
-<div color2="#f0e6fa" effect=SyncWin()></div>
+<div color2="#f0e6fa" effect=SyncWin>
+</div>

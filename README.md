@@ -17,7 +17,8 @@ npm install mofron mofron-effect-syncwin
     <tag load="mofron-effect-syncwin">SyncWin</tag>
 </require>
 
-<div color2="#f0e6fa" effect=SyncWin()></div>
+<div color2="#f0e6fa" effect=SyncWin>
+</div>
 ```
 
 # Parameter
@@ -26,6 +27,14 @@ npm install mofron mofron-effect-syncwin
 |:-------------:|:---------------|:-----|:------------|
 | ◯  | valid | boolean | valid flag for horizon |
 | | | boolean | valid flag for vertical |
-| ◯  | offset | string (size) | horizon offset size |
+| | x_valid | boolean | true: enabled horizonal sync [default] |
+| | | | false: disabled horizonal sync |
+| | | | undefined: call as getter |
+| | y_valid | boolean | true: enabled vertical sync [default] |
+| | | | false: disabled vertical sync |
+| | | | undefined: call as getter |
+| ◯  | offset | string (size) | horizonal offset size |
 | | | string (size) | vertical offset size |
+| | x_offset | string(size) | horizonal offset size |
+| | y_offset | string(size) | vertical offset size |
 

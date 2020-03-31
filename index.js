@@ -96,12 +96,48 @@ module.exports = class extends mofron.class.Effect {
         try {
             if (undefined === x) {
                 /* getter */
-		return [ this.confmng("x_valid"), this.confmng("y_valid") ];
+		return [ this.x_valid(), this.y_valid() ];
 	    }
 	    /* setter */
-	    this.confmng("x_valid", x);
-	    this.confmng("y_valid", y);
+	    this.x_valid(x);
+	    this.y_valid(y);
          } catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
+    
+    /**
+     * horizonal valid flag setter/getter
+     * 
+     * @param (boolean) true: enabled horizonal sync [default]
+     *                  false: disabled horizonal sync
+     *                  undefined: call as getter
+     * @return (boolean) horizonal valid flag
+     * @type parameter
+     */
+    x_valid (prm) {
+        try {
+            return this.confmng("x_valid", prm);
+	} catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
+    
+    /**
+     * vertical valid flag setter/getter
+     * 
+     * @param (boolean) true: enabled vertical sync [default]
+     *                  false: disabled vertical sync
+     *                  undefined: call as getter
+     * @return (boolean) vertival valid flag
+     * @type parameter
+     */
+    y_valid (prm) {
+        try {
+            return this.confmng("y_valid", prm);
+        } catch (e) {
             console.error(e.stack);
             throw e;
         }
@@ -110,7 +146,7 @@ module.exports = class extends mofron.class.Effect {
     /**
      * setter/getter offset size
      * 
-     * @param (string (size)) horizon offset size
+     * @param (string (size)) horizonal offset size
      * @param (string (size)) vertical offset size
      * @return (array) [horizon offset size, vertical offset size]
      * @type parameter
@@ -119,12 +155,44 @@ module.exports = class extends mofron.class.Effect {
         try {
             if (undefined === x) {
                 /* getter */
-		return [ this.confmng("x_offset"), this.confmng("y_offset") ] 
+		return [ this.x_offset(), this.y_offset() ];
 	    }
 	    /* setter */
-            this.confmng("x_offset", x);
-	    this.confmng("y_offset", y)
+            this.x_offset(x);
+	    this.y_offset(y);
          } catch (e) {
+            console.error(e.stack);
+            throw e;
+         }
+    }
+    
+    /**
+     * horizonal offset size setter/getter
+     * 
+     * @param (string(size)) horizonal offset size
+     * @return (string(size)) horizonal offset size
+     * @type parameter
+     */
+    x_offset (prm) {
+        try {
+            return this.confmng("x_offset", prm);
+	} catch (e) {
+	    console.error(e.stack);
+            throw e;
+        }
+    }
+    
+    /**
+     * vertical offset size setter/getter
+     * 
+     * @param (string(size)) vertical offset size
+     * @return (string(size)) vertical offset size
+     * @type parameter
+     */
+    y_offset (prm) {
+        try {
+            return this.confmng("y_offset", prm);
+        } catch (e) {
             console.error(e.stack);
             throw e;
         }

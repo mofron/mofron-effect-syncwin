@@ -16,19 +16,21 @@ module.exports = class extends mofron.class.Effect {
      * @short valid,offset
      * @type private
      */
-    constructor (p1, p2) {
+    constructor (prm) {
         try {
             super();
             this.name('SyncWin');
             this.shortForm('valid', 'offset');
             
             /* init config */
-	    this.confmng().add("valid", { type: "array", init: [true, true] });
-            this.confmng().add("offset", { type: "array", init: ["0px", "0px"] });
+	    this.confmng().add("x_valid", { type: "boolean", init: true });
+	    this.confmng().add("y_valid", { type: "boolean", init: true });
+            this.confmng().add("x_offset", { type: "size" });
+	    this.confmng().add("y_offset", { type: "size" });
             
 	    /* set config */
-	    if (0 < arguments.length) {
-                this.config(p1, p2);
+	    if (undefined !== prm) {
+                this.config(prm);
             }
         } catch (e) {
             console.error(e.stack);
@@ -44,12 +46,14 @@ module.exports = class extends mofron.class.Effect {
      */
     contents (tgt) {
         try {
+            let off = this.offset();
+            off[0] = (null === off[0]) ? undefined : comutl.getsize(off[0]).toPixel() + 'px';
+	    off[1] = (null === off[1]) ? undefined : comutl.getsize(off[1]).toPixel() + 'px';
+            
             if (true === this.valid()[0]) {
                 /* set horizon size */
 		try {
-                    tgt.width(
-		        comutl.sizesum(window.innerWidth + 'px',this.offset()[0])
-		    );
+                    tgt.width(comutl.sizesum(window.innerWidth + 'px', off[0]));
 		} catch (e) {
                     tgt.width(window.innerWidth + 'px');
 		}
@@ -57,9 +61,7 @@ module.exports = class extends mofron.class.Effect {
 	    if (true === this.valid()[1]) {
                 /* set vertical size */
 		try {
-                    tgt.height(
-                        comutl.sizesum(window.innerHeight + 'px',this.offset()[1])
-		    );
+                    tgt.height(comutl.sizesum(window.innerHeight + 'px', off[1]));
 		} catch (e) {
                     tgt.height(window.innerHeight + 'px');
 		}
@@ -94,13 +96,11 @@ module.exports = class extends mofron.class.Effect {
         try {
             if (undefined === x) {
                 /* getter */
-		return this.confmng("valid");
+		return [ this.confmng("x_valid"), this.confmng("y_valid") ];
 	    }
 	    /* setter */
-	    if (('boolean' !== typeof x) || ('boolean' !== typeof y)) {
-                throw new Error("invalid parameter");
-	    }
-            this.confmng("valid",[ x,y ]);
+	    this.confmng("x_valid", x);
+	    this.confmng("y_valid", y);
          } catch (e) {
             console.error(e.stack);
             throw e;
@@ -119,13 +119,11 @@ module.exports = class extends mofron.class.Effect {
         try {
             if (undefined === x) {
                 /* getter */
-                return this.confmng("offset");
-            }
-            /* setter */
-            this.confmng(
-	        "offset",
-		[ comutl.getsize(x), comutl.getsize(y) ]
-	    );
+		return [ this.confmng("x_offset"), this.confmng("y_offset") ] 
+	    }
+	    /* setter */
+            this.confmng("x_offset", x);
+	    this.confmng("y_offset", y)
          } catch (e) {
             console.error(e.stack);
             throw e;

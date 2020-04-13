@@ -10,13 +10,13 @@ module.exports = class extends mofron.class.Effect {
     /**
      * initialize effect
      * 
-     * @param (mixed) valid parameter
-     *                key-value: effect option
-     * @param (array) offset parameter
+     * @param (mixed) valid config parameter
+     *                dict: effect config list
+     * @param (mixed) offset config parameter
      * @short valid,offset
      * @type private
      */
-    constructor (prm) {
+    constructor (p1, p2) {
         try {
             super();
             this.name('SyncWin');
@@ -29,8 +29,8 @@ module.exports = class extends mofron.class.Effect {
 	    this.confmng().add("y_offset", { type: "size" });
             
 	    /* set config */
-	    if (undefined !== prm) {
-                this.config(prm);
+	    if (0 < arguments.length) {
+                this.config(p1,p2);
             }
         } catch (e) {
             console.error(e.stack);

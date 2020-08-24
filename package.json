@@ -1,6 +1,6 @@
 {
   "name": "mofron-effect-syncwin",
-  "version": "0.3.5",
+  "version": "0.4.0",
   "description": "synchronize target with window size effect for mofron",
   "main": "index.js",
   "scripts": {

@@ -6,29 +6,6 @@
  */
 const comutl = mofron.util.common;
 
-let get_offsiz = (off) => {
-    try {
-        let ret = [];
-        for (let oidx in off) {
-            if (null === off[oidx]) {
-                ret.push(undefined);
-		continue;
-	    }
-	    let siz = comutl.getsize(off[oidx]);
-	    if ('%' === siz.type()) {
-	        let oval = siz.value() / 100;
-                ret.push((0 == oidx) ? window.innerWidth*oval : window.innerHeight*oval);
-	    } else {
-                ret.push(siz.toPixel() + 'px');
-	    }
-	}
-        return ret;
-    } catch (e) {
-        console.error(e.stack);
-        throw e;
-    }
-}
-
 module.exports = class extends mofron.class.Effect {
     /**
      * initialize effect
@@ -42,7 +19,7 @@ module.exports = class extends mofron.class.Effect {
     constructor (p1, p2) {
         try {
             super();
-            this.name('SyncWin');
+            this.modname('SyncWin');
             this.shortForm('valid', 'offset');
             
             /* init config */
@@ -69,7 +46,9 @@ module.exports = class extends mofron.class.Effect {
      */
     contents (tgt) {
         try {
-            let off = get_offsiz(this.offset());
+            let off = this.offset();
+            off[0] = (null === off[0]) ? undefined : comutl.getsize(off[0]).toPixel() + 'px';
+	    off[1] = (null === off[1]) ? undefined : comutl.getsize(off[1]).toPixel() + 'px';
             
             if (true === this.valid()[0]) {
                 /* set horizon size */
